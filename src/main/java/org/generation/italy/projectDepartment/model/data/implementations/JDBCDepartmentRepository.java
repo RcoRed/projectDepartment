@@ -5,7 +5,6 @@ import org.generation.italy.projectDepartment.model.data.exceptions.DataExceptio
 import org.generation.italy.projectDepartment.model.data.exceptions.EntityNotFoundException;
 import org.generation.italy.projectDepartment.model.entities.Address;
 import org.generation.italy.projectDepartment.model.entities.Department;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 
@@ -27,23 +26,19 @@ public class JDBCDepartmentRepository implements DepartmentRepository {
     @Override
     public Department saveDepartment(Department department) throws DataException {
         try (
-                PreparedStatement stD = con.prepareStatement(SAVE_DEPARTMENT_RETURNING_ID,Statement.RETURN_GENERATED_KEYS);
-                PreparedStatement stA = con.prepareStatement(SAVE_ADDRESS_RETURNING_ID,Statement.RETURN_GENERATED_KEYS)
+                PreparedStatement st = con.prepareStatement(SAVE_DEPARTMENT_RETURNING_ID,Statement.RETURN_GENERATED_KEYS);
         ){
-            stA.setString(1,department.getAddress().getStreet());
-            stA.setInt(2,department.getAddress().getHouseNumber());
-            stA.setString(3,department.getAddress().getCity());
-            stA.setString(4,department.getAddress().getCountry());
-            int addressKey = stA.executeUpdate();
-            department.getAddress().setId(addressKey);
-
-            stD.setString(1,department.getName());
-            stD.setLong(2,department.getAddress().getId());
-            stD.setInt(3,department.getMaxCapacity());
-            int departmentKey = stD.executeUpdate();
-            department.setId(departmentKey);
+            st.setString(1,department.getName());
+            st.setLong(2,department.getAddress().getId());
+            st.setInt(3,department.getMaxCapacity());
+            st.executeUpdate();
+            try (ResultSet key = st.getGeneratedKeys()){
+                key.next();
+                department.setId(key.getLong(1));
+            }
             return department;
         } catch (SQLException e) {
+            System.out.println(e.getMessage());
             throw new DataException("Errore nel slavataggio di Department",e);
         }
     }
@@ -70,9 +65,9 @@ public class JDBCDepartmentRepository implements DepartmentRepository {
         ){
             st.setString(1,"%"+part+"%");
             try (ResultSet rs = st.executeQuery()){
-                List<Department> departmentList= new ArrayList<>();
+                List<Department> departmentList = new ArrayList<>();
                 while (rs.next()){
-                    //metodo
+                    departmentList.add(databaseToDepartment(rs));
                 }
                 return departmentList;
             }

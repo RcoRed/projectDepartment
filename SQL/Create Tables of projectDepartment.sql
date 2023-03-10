@@ -2,7 +2,7 @@ DROP TABLE IF EXISTS employee,department,address;
 
 DROP TYPE IF EXISTS sex;
 
-CREATE TYPE sex					AS ENUM ('FEMALE','MALE','UNDECIDED');	--crea un enum
+CREATE TYPE sex					AS ENUM ('FEMALE','MALE','UNDECIDED');
 
 CREATE TABLE address
 (

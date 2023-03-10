@@ -1,19 +1,24 @@
 package org.generation.italy.projectDepartment.model.data;
 
 public class JDBCConstants {
+    //CONNECTION
     public static final String URL = "jdbc:postgresql://localhost:5432/projectDepartment";
     public static final String USER_NAME = "postgresMaster";
     public static final String PASSWORD = "goPostgresGo";
+
+    //INSERIMENTO
     public static final String SAVE_ADDRESS_RETURNING_ID = """
             INSERT INTO address(id_address,street,house_number,city,country)
             	VALUES(nextval('address_sequence'),?,?,?,?)
-            RETURNING id_address;
+            RETURNING id_address
             """;
     public static final String SAVE_DEPARTMENT_RETURNING_ID = """
-            INSERT INTO department(id_department,name,address,max_capacity)
-            	VALUES(nextval('department_sequence'),?,?,?);
-            RETURNING id_department;
+            INSERT INTO department(id_department,name,id_address,max_capacity)
+            	VALUES(nextval('department_sequence'),?,?,?)
+            RETURNING id_department
             """;
+
+    //QUERY UTILS
     public static final String DELETE_DEPARTMENT = """
             DELETE FROM department
             WHERE id_department = ?

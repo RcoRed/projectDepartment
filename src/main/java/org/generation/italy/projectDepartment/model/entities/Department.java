@@ -9,6 +9,9 @@ public class Department {
     private int maxCapacity;
     private Set<Employee> employeeSet;
 
+    public Department(long id, String name, int maxCapacity) {
+        this(id,name,null,maxCapacity,null);
+    }
     public Department(long id, String name, Address address, int maxCapacity) {
         this(id,name,address,maxCapacity,null);
     }
