@@ -1,8 +1,8 @@
 package org.generation.italy.projectDepartment.model.data.implementations;
 
 import org.generation.italy.projectDepartment.model.data.abstractions.DepartmentRepository;
-import org.generation.italy.projectDepartment.model.data.abstractions.LambdaRawMapperInterface;
-import org.generation.italy.projectDepartment.model.data.abstractions.LambdaSetStatementsInterface;
+import org.generation.italy.projectDepartment.model.data.abstractions.lambdaRawMapperInterface;
+import org.generation.italy.projectDepartment.model.data.abstractions.lambdaSetStatementsInterface;
 import org.generation.italy.projectDepartment.model.data.exceptions.DataException;
 import org.generation.italy.projectDepartment.model.data.exceptions.EntityNotFoundException;
 import org.generation.italy.projectDepartment.model.entities.*;
@@ -69,7 +69,7 @@ public class JDBCDepartmentRepository implements DepartmentRepository {
         }
     }
 
-    private LambdaSetStatementsInterface lambdaSetStatements(){
+    private lambdaSetStatementsInterface lambdaSetStatements(){
         return (query,returning,params) -> {
             PreparedStatement st = returning? con.prepareStatement(query,  Statement.RETURN_GENERATED_KEYS)
                     :  con.prepareStatement(query);
@@ -84,7 +84,7 @@ public class JDBCDepartmentRepository implements DepartmentRepository {
         };
     }
 
-    private LambdaRawMapperInterface lambdaRawMapper(){
+    private lambdaRawMapperInterface lambdaRawMapper(){
         return  (rs) -> {
             HashMap<Long,Department> departmentHashMap = new HashMap<>();
             Department department = null;
@@ -145,11 +145,11 @@ public class JDBCDepartmentRepository implements DepartmentRepository {
         };
     }
 
-    public PreparedStatement setStatements(String query, boolean returning, LambdaSetStatementsInterface myFunction, Object... params) throws SQLException{
+    public PreparedStatement setStatements(String query, boolean returning, lambdaSetStatementsInterface myFunction, Object... params) throws SQLException{
         return myFunction.setStatements(query,returning,params);
     }
 
-    public Object rawMapper(ResultSet rs, LambdaRawMapperInterface myFunction) throws SQLException {
+    public Object rawMapper(ResultSet rs, lambdaRawMapperInterface myFunction) throws SQLException {
         return myFunction.lambdaRawMapper(rs);
     }
 }
