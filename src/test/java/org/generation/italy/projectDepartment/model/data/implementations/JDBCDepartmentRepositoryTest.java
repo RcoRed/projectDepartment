@@ -15,7 +15,6 @@ import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -29,7 +28,6 @@ class JDBCDepartmentRepositoryTest {
     JDBCDepartmentRepository repo;
     Address address1;
     Address address2;
-    Address address3;
     Department department1;
     Department department2;
     Department department3;
@@ -51,7 +49,9 @@ class JDBCDepartmentRepositoryTest {
             department4 = new Department(0,D_NAME3,address2,D_MAX_CAPACITY);
             //CREAZIONE EMPLOYEE
             employee1 = new Employee(0,E_NAME1,E_SURNAME1,HIRE_DATE, Sex.MALE,department3);
+            department3.getEmployeeSet().add(employee1);
             employee2 = new Employee(0,E_NAME2,E_SURNAME2,HIRE_DATE, Sex.FEMALE,department4);
+            department4.getEmployeeSet().add(employee2);
             //CREAZIONE CONNECTION
             con = DriverManager.getConnection(URL,USER_NAME,PASSWORD);
             con.setAutoCommit(false);
@@ -145,15 +145,19 @@ class JDBCDepartmentRepositoryTest {
     @Test
     void findDepartmentByNameLike_should_find_department() {
         try {
-            Iterable<Department> result = repo.findDepartmentByNameLike("m");
-            Iterator<Department> it = result.iterator();
-            assertTrue(it.hasNext());
-            Department dTest1 = it.next();
+            Iterable<Department> result = repo.findDepartmentByNameLike("ME_3");
+            Iterator<Department> itDepartment = result.iterator();
+            assertTrue(itDepartment.hasNext());
+            Department dTest1 = itDepartment.next();
             assertTrue(department3.getId() == dTest1.getId() || department4.getId() == dTest1.getId());
-            assertTrue(it.hasNext());
-            Department dTest2 = it.next();
+            dTest1.getEmployeeSet().stream().forEach(e -> assertTrue(e.getId() == employee1.getId() || e.getId() == employee2.getId()));
+
+            assertTrue(itDepartment.hasNext());
+            Department dTest2 = itDepartment.next();
             assertTrue(department3.getId() == dTest2.getId() || department4.getId() == dTest2.getId());
-            assertFalse(it.hasNext());
+            dTest2.getEmployeeSet().stream().forEach(e -> assertTrue(e.getId() == employee1.getId() || e.getId() == employee2.getId()));
+
+            assertFalse(itDepartment.hasNext());
         } catch (DataException e) {
             fail(e.getMessage());
         }
