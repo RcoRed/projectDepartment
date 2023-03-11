@@ -1,6 +1,8 @@
 package org.generation.italy.projectDepartment.model.data.implementations;
 
 import org.generation.italy.projectDepartment.model.data.abstractions.DepartmentRepository;
+import org.generation.italy.projectDepartment.model.data.abstractions.lambdaRawMapperInterface;
+import org.generation.italy.projectDepartment.model.data.abstractions.lambdaSetStatementsInterface;
 import org.generation.italy.projectDepartment.model.data.exceptions.DataException;
 import org.generation.italy.projectDepartment.model.data.exceptions.EntityNotFoundException;
 import org.generation.italy.projectDepartment.model.entities.*;
@@ -67,7 +69,7 @@ public class JDBCDepartmentRepository implements DepartmentRepository {
         }
     }
 
-    private MyLambdaInterface lambdaSetStatements(){
+    private lambdaSetStatementsInterface lambdaSetStatements(){
         return (query,returning,params) -> {
             PreparedStatement st = returning? con.prepareStatement(query,  Statement.RETURN_GENERATED_KEYS)
                     :  con.prepareStatement(query);
@@ -82,7 +84,7 @@ public class JDBCDepartmentRepository implements DepartmentRepository {
         };
     }
 
-    private MyLambdaInterface2 lambdaRawMapper(){
+    private lambdaRawMapperInterface lambdaRawMapper(){
         return  (rs) -> {
             HashMap<Long,Department> departmentHashMap = new HashMap<>();
             Department department = null;
@@ -143,11 +145,11 @@ public class JDBCDepartmentRepository implements DepartmentRepository {
         };
     }
 
-    public PreparedStatement setStatements(String query, boolean returning, MyLambdaInterface myFunction, Object... params) throws SQLException{
-        return myFunction.setParameter(query,returning,params);
+    public PreparedStatement setStatements(String query, boolean returning, lambdaSetStatementsInterface myFunction, Object... params) throws SQLException{
+        return myFunction.setStatements(query,returning,params);
     }
 
-    public Object rawMapper(ResultSet rs, MyLambdaInterface2 myFunction) throws SQLException {
-        return myFunction.databaseToJava(rs);
+    public Object rawMapper(ResultSet rs, lambdaRawMapperInterface myFunction) throws SQLException {
+        return myFunction.lambdaRawMapper(rs);
     }
 }
