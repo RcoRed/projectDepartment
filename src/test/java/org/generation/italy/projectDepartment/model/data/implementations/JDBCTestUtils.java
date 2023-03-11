@@ -1,8 +1,6 @@
 package org.generation.italy.projectDepartment.model.data.implementations;
 
-import org.generation.italy.projectDepartment.model.entities.Address;
 import org.generation.italy.projectDepartment.model.entities.Department;
-import org.generation.italy.projectDepartment.model.entities.Employee;
 
 import java.sql.*;
 import java.util.Optional;
@@ -33,18 +31,6 @@ public class JDBCTestUtils {
                 rs.getString("name"),
                 rs.getInt("max_capacity"));
     }
-//    private static Address createAddressFrom(ResultSet rs) throws SQLException {
-//        return new Address(
-//                rs.getLong("id_department"),
-//                rs.getString("name"),
-//                rs.getInt("max_capacity"));
-//    }
-//    private static Employee createEmployeeFrom(ResultSet rs) throws SQLException {
-//        return new Employee(
-//                rs.getLong("id_department"),
-//                rs.getString("name"),
-//                rs.getInt("max_capacity"));
-//    }
 
     public static int update(String query, Connection con, boolean inserting, Object... params){
         try (PreparedStatement st = inserting? con.prepareStatement(query,  Statement.RETURN_GENERATED_KEYS)

@@ -10,6 +10,10 @@ public class Employee {
     private Sex sex;
     private Department department;
 
+    public Employee(long id, String name, String surname, LocalDate hireDate, Sex sex) {
+        this(id,name,surname,hireDate,sex,null);
+    }
+
     public Employee(long id, String name, String surname, LocalDate hireDate, Sex sex, Department department) {
         this.id = id;
         this.name = name;
@@ -45,5 +49,9 @@ public class Employee {
 
     public Department getDepartment() {
         return department;
+    }
+
+    public void setDepartment(Department department) {
+        this.department = department;
     }
 }
