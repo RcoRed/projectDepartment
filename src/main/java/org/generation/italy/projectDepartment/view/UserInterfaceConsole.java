@@ -16,6 +16,7 @@ public class UserInterfaceConsole {
 
     public void start(){
         System.out.println("start");
+        System.out.println(service);
     }
 
 }

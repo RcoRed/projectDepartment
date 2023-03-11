@@ -152,4 +152,9 @@ public class JDBCDepartmentRepository implements DepartmentRepository {
     public Object rawMapper(ResultSet rs, LambdaRawMapperInterface myFunction) throws SQLException {
         return myFunction.lambdaRawMapper(rs);
     }
+
+    @Override
+    public String toString() {
+        return "JDBCDepartmentRepository -> Profile = jdbc";
+    }
 }
