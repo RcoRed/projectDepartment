@@ -62,7 +62,7 @@ public class JDBCDepartmentRepository implements DepartmentRepository {
         )
         {
             try (ResultSet rs = st.executeQuery()){
-                return (Iterable<Department>) rawMapper(rs, lambdaRawMapper());
+                return (Iterable<Department>) rawMapper(rs, true, lambdaRawMapper());
             }
         } catch (SQLException e) {
             throw new DataException("Errore nel eliminazione di un Department",e);
@@ -85,7 +85,7 @@ public class JDBCDepartmentRepository implements DepartmentRepository {
     }
 
     private LambdaRawMapperInterface lambdaRawMapper(){
-        return  (rs) -> {
+        return  (rs,returnACollection) -> {
             HashMap<Long,Department> departmentHashMap = new HashMap<>();
             Department department = null;
             Address address;
@@ -138,7 +138,7 @@ public class JDBCDepartmentRepository implements DepartmentRepository {
                 }catch (SQLException e){
                 }
             }
-            if (departmentHashMap.size()!=1){
+            if (returnACollection){
                 return departmentHashMap.values();
             }
             return departmentHashMap.get(key);
@@ -149,7 +149,7 @@ public class JDBCDepartmentRepository implements DepartmentRepository {
         return myFunction.setStatements(query,returning,params);
     }
 
-    public Object rawMapper(ResultSet rs, LambdaRawMapperInterface myFunction) throws SQLException {
-        return myFunction.lambdaRawMapper(rs);
+    public Object rawMapper(ResultSet rs, boolean returnACollection, LambdaRawMapperInterface myFunction) throws SQLException {
+        return myFunction.lambdaRawMapper(rs,returnACollection);
     }
 }

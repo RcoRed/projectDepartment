@@ -5,5 +5,5 @@ import java.sql.SQLException;
 
 @FunctionalInterface
 public interface LambdaRawMapperInterface {
-    Object lambdaRawMapper(ResultSet rs) throws SQLException;
+    Object lambdaRawMapper(ResultSet rs,boolean returnACollection) throws SQLException;
 }
