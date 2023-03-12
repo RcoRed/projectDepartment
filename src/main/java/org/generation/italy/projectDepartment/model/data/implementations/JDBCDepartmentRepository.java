@@ -126,7 +126,7 @@ public class JDBCDepartmentRepository implements DepartmentRepository {
                             rs.getString("e_name"),
                             rs.getString("e_surname"),
                             rs.getDate("e_hire_date").toLocalDate(),
-                            Sex.MALE
+                            Sex.valueOf(rs.getString("e_sex"))
                     );
                     if (department != null){
                         employee.setDepartment(department);
@@ -151,5 +151,10 @@ public class JDBCDepartmentRepository implements DepartmentRepository {
 
     public Object rawMapper(ResultSet rs, boolean returnACollection, LambdaRawMapperInterface myFunction) throws SQLException {
         return myFunction.lambdaRawMapper(rs,returnACollection);
+    }
+
+    @Override
+    public String toString() {
+        return "JDBCDepartmentRepository -> Profile = jdbc";
     }
 }

@@ -32,4 +32,9 @@ public class StandardDepartmentService implements AbstractDepartmentService {
     public Iterable<Department> findDepartmentByNameLike(String part) throws DataException {
         return null;
     }
+
+    @Override
+    public String toString() {
+        return "Service = StandardDepartmentService -> Repository = " + repo;
+    }
 }
