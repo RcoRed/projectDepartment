@@ -2,6 +2,7 @@ package org.generation.italy.projectDepartment.model.data.implementations;
 
 import org.generation.italy.projectDepartment.model.data.abstractions.DepartmentRepository;
 import org.generation.italy.projectDepartment.model.data.abstractions.LambdaRawMapperInterface;
+import org.generation.italy.projectDepartment.model.data.abstractions.LambdaRawMapperInterface2;
 import org.generation.italy.projectDepartment.model.data.abstractions.LambdaSetStatementsInterface;
 import org.generation.italy.projectDepartment.model.data.exceptions.DataException;
 import org.generation.italy.projectDepartment.model.data.exceptions.EntityNotFoundException;
@@ -10,6 +11,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import static org.generation.italy.projectDepartment.model.data.JDBCConstants.*;
@@ -143,6 +145,51 @@ public class JDBCDepartmentRepository implements DepartmentRepository {
             }
             return departmentHashMap.get(key);
         };
+    }
+
+    private LambdaRawMapperInterface2 proveLambdaRawMapper2(){
+        return  (query) -> {
+            query = query.toLowerCase().trim();
+            int indexFrom = query.indexOf("from");
+            boolean asJoin = query.contains("join");
+            ArrayList<String> columnAlias = new ArrayList<>();
+            //nel dubbio
+            ArrayList<String> columnAliasDefinitivo = new ArrayList<>();
+
+            String querySubStringSF = query.substring(6,indexFrom);
+
+            if (querySubStringSF.contains(",")){
+                columnAlias.add(querySubStringSF.substring(0,querySubStringSF.indexOf(',')));
+                while (querySubStringSF.contains(",")){
+                    int firstComma = querySubStringSF.indexOf(',');
+                    String column = querySubStringSF.substring(firstComma+1);
+                    columnAlias.add(0,column.substring(column.indexOf(',')));
+                }
+            }else {
+                columnAlias.add(querySubStringSF);
+            }
+
+            columnAlias.forEach(e-> {
+                if (e.contains("as")){
+                    int asColumn = e.indexOf("as")+2;
+                    columnAliasDefinitivo.add(e.substring(asColumn,e.indexOf(',')));
+                } else if (asJoin){
+                    columnAliasDefinitivo.add(e.substring(e.indexOf('.')+1));
+                }
+            });
+
+            return columnAliasDefinitivo;
+        };
+    }
+
+    public Iterable<Department> proveRawMapper2(String query,ResultSet rs,LambdaRawMapperInterface2 myfunction, Object... params) throws SQLException {
+        var columnAlias = myfunction.lambdaRawMapper(query);
+        while (rs.next()){
+            columnAlias.forEach(e -> {
+                //mettici una AI che fatto al posto tuo
+            });
+        }
+        return null;
     }
 
     public PreparedStatement setStatements(String query, boolean returning, LambdaSetStatementsInterface myFunction, Object... params) throws SQLException{
