@@ -158,3 +158,51 @@ public class JDBCDepartmentRepository implements DepartmentRepository {
         return "JDBCDepartmentRepository -> Profile = jdbc";
     }
 }
+
+//PROVE FALLIMENTARI DELLA BRANCH SECONDA_VERSIONE
+
+
+//    private LambdaRawMapperInterface2 proveLambdaRawMapper2(){
+//        return  (query) -> {
+//            query = query.toLowerCase().trim();
+//            int indexFrom = query.indexOf("from");
+//            boolean asJoin = query.contains("join");
+//            ArrayList<String> columnAlias = new ArrayList<>();
+//            //nel dubbio
+//            ArrayList<String> columnAliasDefinitivo = new ArrayList<>();
+//
+//            String querySubStringSF = query.substring(6,indexFrom);
+//
+//            if (querySubStringSF.contains(",")){
+//                columnAlias.add(querySubStringSF.substring(0,querySubStringSF.indexOf(',')));
+//                while (querySubStringSF.contains(",")){
+//                    int firstComma = querySubStringSF.indexOf(',');
+//                    String column = querySubStringSF.substring(firstComma+1);
+//                    columnAlias.add(0,column.substring(column.indexOf(',')));
+//                }
+//            }else {
+//                columnAlias.add(querySubStringSF);
+//            }
+//
+//            columnAlias.forEach(e-> {
+//                if (e.contains("as")){
+//                    int asColumn = e.indexOf("as")+2;
+//                    columnAliasDefinitivo.add(e.substring(asColumn,e.indexOf(',')));
+//                } else if (asJoin){
+//                    columnAliasDefinitivo.add(e.substring(e.indexOf('.')+1));
+//                }
+//            });
+//
+//            return columnAliasDefinitivo;
+//        };
+//    }
+//
+//    public Iterable<Department> proveRawMapper2(String query, ResultSet rs, LambdaRawMapperInterface2 myfunction, Object... params) throws SQLException {
+//        var columnAlias = myfunction.lambdaRawMapper(query);
+//        while (rs.next()){
+//            columnAlias.forEach(e -> {
+//                //mettici una AI che fatto al posto tuo
+//            });
+//        }
+//        return null;
+//    }
